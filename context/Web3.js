@@ -29,8 +29,16 @@ const Web3Provider = ({ children }) => {
 		);
 	}, []);
 
+	const getCampaigns = async () => {
+		if (factory.methods) {
+			setCampaigns(await factory?.methods?.getDeployedCampaigns().call());
+		}
+	};
+
 	return (
-		<Web3Context.Provider value={{ web3, factory, campaigns, curAccount }}>
+		<Web3Context.Provider
+			value={{ web3, factory, campaigns, curAccount, getCampaigns }}
+		>
 			{children}
 		</Web3Context.Provider>
 	);

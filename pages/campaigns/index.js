@@ -11,8 +11,11 @@ import CampaignGrid from "../../components/Home/CampaignGrid";
 import { useWeb3 } from "../../context/Web3";
 
 const useStyles = makeStyles({
+	container: {
+		paddingTop: "30px",
+	},
 	pageTitle: {
-		margin: "20px 0px",
+		marginBottom: "30px",
 		color: "#fff",
 	},
 });
@@ -20,19 +23,18 @@ const useStyles = makeStyles({
 export default function Home() {
 	const { web3 } = useWeb3();
 	const classes = useStyles();
+
 	return web3["version"] ? (
 		<>
-			<Container>
-				<Grid container spacing={1}>
-					<Grid item xs={12} className={classes.pageTitle}>
-						<Typography variant="h4" components="h1">
-							Campaigns
-						</Typography>
-					</Grid>
-					<Grid item xs={12}>
-						<CampaignGrid />
-					</Grid>
-				</Grid>
+			<Container className={classes.container}>
+				<Typography
+					variant="h4"
+					components="h1"
+					className={classes.pageTitle}
+				>
+					Campaigns
+				</Typography>
+				<CampaignGrid />
 			</Container>
 		</>
 	) : (

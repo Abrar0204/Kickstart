@@ -5,11 +5,13 @@ import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core";
 
 import React, { useState } from "react";
 import { useWeb3 } from "../../../context/Web3";
-
+import { useRouter } from "next/router";
 const useStyles = makeStyles({
 	formContainer: {
 		width: "50%",
@@ -32,13 +34,18 @@ const useStyles = makeStyles({
 	},
 });
 
-const CreateCamapaign = () => {
+const CreateCampaign = () => {
 	const classes = useStyles();
-	const { web3, factory, curAccount } = useWeb3();
+	const router = useRouter();
+
+	const { web3, factory, curAccount, getCampaigns } = useWeb3();
 
 	const [campaignData, setCampaignData] = useState({
 		minimumContribution: 0,
 	});
+	const [errMessage, setErrMessage] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const handleChange = e => {
 		const { name, value } = e.target;
@@ -47,10 +54,41 @@ const CreateCamapaign = () => {
 
 	const handleSubmit = async e => {
 		e.preventDefault();
-		await factory.methods
-			.createCamapaign()
-			.send({ from: curAccount, gas: "2000000" });
+		setLoading(true);
+		try {
+			await factory.methods
+				.createCampaign(campaignData.minimumContribution)
+				.send({ from: curAccount });
+			setLoading(false);
+			setSuccess(true);
+			router.push("/campaigns");
+		} catch (err) {
+			let message = err.message || "";
+			setLoading(false);
+			if (message.includes("User denied transaction signature")) {
+				setErrMessage("The transaction was cancelled.");
+			}
+		}
 	};
+
+	const displayTransactionInfo = () => {
+		if (loading) {
+			return (
+				<Alert severity="info">
+					The Transaction is being processed.
+				</Alert>
+			);
+		}
+		if (errMessage) {
+			return <Alert severity="error">{errMessage}</Alert>;
+		}
+		if (success) {
+			return (
+				<Alert severity="success">The Transaction was a success.</Alert>
+			);
+		}
+	};
+
 	return (
 		<>
 			<Container className={classes.container}>
@@ -70,19 +108,30 @@ const CreateCamapaign = () => {
 								name="minimumContribution"
 								label="Minimum Contribution"
 								type="number"
-								defaultValue={0}
 								value={campaignData.minimumContribution}
 								onChange={handleChange}
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
-											ether
+											wei
 										</InputAdornment>
 									),
 								}}
 							/>
-							<Button variant="contained" color="primary">
-								Submit
+							{displayTransactionInfo()}
+							<Button
+								variant="contained"
+								color="primary"
+								type="submit"
+							>
+								{loading ? (
+									<CircularProgress
+										color="secondary"
+										size={25}
+									/>
+								) : (
+									"Submit"
+								)}
 							</Button>
 						</form>
 					</CardContent>
@@ -92,4 +141,4 @@ const CreateCamapaign = () => {
 	);
 };
 
-export default CreateCamapaign;
+export default CreateCampaign;

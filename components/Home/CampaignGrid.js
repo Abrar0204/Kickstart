@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
@@ -6,41 +6,37 @@ import Typography from "@material-ui/core/Typography";
 
 import { useWeb3 } from "../../context/Web3";
 
-import { useState } from "react";
+import Link from "next/link";
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+	campaignCard: {
+		"&:hover": {
+			cursor: "pointer",
+		},
+		height: "240px",
+	},
+});
 const CampaignGrid = () => {
-	// const { campaigns } = useWeb3();
+	const { campaigns, getCampaigns } = useWeb3();
+	const classes = useStyles();
 
-	const [campaigns, setCampaigns] = useState([
-		{
-			name: "Campaign #1",
-			id: "#1",
-			description: "Some goddamn description",
-		},
-		{
-			name: "Campaign #2",
-			id: "#2",
-			description: "Some goddamn description",
-		},
-		{
-			name: "Campaign #3",
-			id: "#3",
-			description: "Some goddamn description",
-		},
-	]);
+	useEffect(() => {
+		console.log("rendering");
+		(async () => await getCampaigns())();
+	}, []);
+
 	return (
-		<Grid container spacing={1}>
-			{campaigns.map(({ name, id, description }) => (
-				<Grid item key={id} xs={4}>
-					<Card>
-						<CardContent>
-							<Typography variant="h5" component="h2">
-								Campaign {id}
-							</Typography>
-						</CardContent>
-					</Card>
+		<Grid container spacing={3} justify="center">
+			{campaigns.map(campaign => (
+				<Grid item key={campaign} xs={5}>
+					<Link href={`/campaigns/${campaign}`} passHref>
+						<Card className={classes.campaignCard}>
+							<CardContent>
+								<Typography>{campaign}</Typography>
+							</CardContent>
+						</Card>
+					</Link>
 				</Grid>
 			))}
 		</Grid>
