@@ -42,6 +42,8 @@ const CreateCampaign = () => {
 
 	const [campaignData, setCampaignData] = useState({
 		minimumContribution: 0,
+		title: "",
+		description: "",
 	});
 	const [errMessage, setErrMessage] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -56,8 +58,9 @@ const CreateCampaign = () => {
 		e.preventDefault();
 		setLoading(true);
 		try {
+			const { title, description, minimumContribution } = campaignData;
 			await factory.methods
-				.createCampaign(campaignData.minimumContribution)
+				.createCampaign(title, description, minimumContribution)
 				.send({ from: curAccount });
 			setLoading(false);
 			setSuccess(true);
@@ -102,6 +105,22 @@ const CreateCampaign = () => {
 							Create Campaign
 						</Typography>
 						<form className={classes.form} onSubmit={handleSubmit}>
+							<TextField
+								fullWidth
+								variant="outlined"
+								name="title"
+								label="Campaign Title"
+								value={campaignData.title}
+								onChange={handleChange}
+							/>
+							<TextField
+								fullWidth
+								variant="outlined"
+								name="description"
+								label="Campaign Description"
+								value={campaignData.description}
+								onChange={handleChange}
+							/>
 							<TextField
 								fullWidth
 								variant="outlined"

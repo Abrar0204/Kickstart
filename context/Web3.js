@@ -17,7 +17,9 @@ const Web3Provider = ({ children }) => {
 			const factoryContract = await getFactory();
 			setFactory(factoryContract);
 			setCampaigns(
-				await factoryContract.methods.getDeployedCampaigns().call()
+				formatCampaigns(
+					await factoryContract.methods.getDeployedCampaigns().call()
+				)
 			);
 		})();
 		window.ethereum.on("disconnect", err =>
@@ -29,9 +31,28 @@ const Web3Provider = ({ children }) => {
 		);
 	}, []);
 
+	const formatCampaigns = campaignsData => {
+		let newCamapaignsData = {};
+
+		campaignsData.map(campaign => {
+			newCamapaignsData[campaign[4]] = {
+				title: campaign[0],
+				description: campaign[1],
+				minimumContribution: campaign[2],
+				manager: campaign[3],
+				contractAddress: campaign[4],
+			};
+		});
+		return newCamapaignsData;
+	};
+
 	const getCampaigns = async () => {
 		if (factory.methods) {
-			setCampaigns(await factory?.methods?.getDeployedCampaigns().call());
+			const campaignsData = await factory?.methods
+				?.getDeployedCampaigns()
+				.call();
+
+			setCampaigns(formatCampaigns(campaignsData));
 		}
 	};
 
