@@ -29,6 +29,7 @@ const useStyles = makeStyles({
 export default function Home() {
 	const { web3 } = useWeb3();
 	const classes = useStyles();
+
 	return web3["version"] ? (
 		<>
 			<Container className={classes.center}>

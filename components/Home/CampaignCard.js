@@ -13,6 +13,11 @@ const useStyles = makeStyles({
 		},
 		height: "240px",
 	},
+	content: {
+		"& > *": {
+			margin: "30px",
+		},
+	},
 });
 
 const CampaignCard = ({ campaign }) => {
@@ -29,8 +34,23 @@ const CampaignCard = ({ campaign }) => {
 		<Grid item xs={6}>
 			<Link href={`/campaigns/${contractAddress}`} passHref>
 				<Card className={classes.campaignCard}>
-					<CardContent>
-						<Typography>{contractAddress}</Typography>
+					<CardContent className={classes.content}>
+						<div>
+							<Typography variant="h5" component="h1">
+								{title}
+							</Typography>
+							<Typography variant="h6" component="h2">
+								{description}
+							</Typography>
+						</div>
+						<div>
+							<Typography color="textSecondary" variant="body1">
+								Created By
+							</Typography>
+							<Typography color="textSecondary" variant="body1">
+								{manager}
+							</Typography>
+						</div>
 					</CardContent>
 				</Card>
 			</Link>
