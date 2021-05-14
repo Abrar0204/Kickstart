@@ -66,7 +66,7 @@ const NewRequest = ({ id }) => {
 
 	const handleSubmit = async e => {
 		e.preventDefault();
-		console.log("What");
+		//console.log("What");
 		setLoading(true);
 		try {
 			const { description, vendor, cost } = requestData;
@@ -79,7 +79,7 @@ const NewRequest = ({ id }) => {
 		} catch (err) {
 			let message = err.message || "";
 			setLoading(false);
-			console.log(err);
+			//console.log(err);
 			if (message.includes("User denied transaction signature")) {
 				setErrMessage("The transaction was cancelled.");
 			}

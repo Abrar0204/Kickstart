@@ -42,7 +42,7 @@ const Campaign = ({ id }) => {
 				requestLength: campaign[5],
 				approverLength: campaign[6],
 			});
-			console.log(campaign);
+			//console.log(campaign);
 			setContract(contractIns);
 		};
 		getCampaignData();

@@ -20,11 +20,12 @@ async function deploy() {
 		const accounts = await web3.eth.getAccounts();
 		const deploymentAccount = accounts[0];
 
-		const privateKey = provider.wallets[
-			deploymentAccount.toLowerCase()
-		].privateKey.toString("hex");
+		const privateKey =
+			provider.wallets[
+				deploymentAccount.toLowerCase()
+			].privateKey.toString("hex");
 
-		console.log("Available accounts: ", accounts);
+		//console.log("Available accounts: ", accounts);
 
 		const contract = await new web3.eth.Contract(compiledFactory.abi)
 			.deploy({ data: compiledFactory.evm.bytecode.object })
@@ -45,10 +46,10 @@ async function deploy() {
 		let result = await web3.eth.sendSignedTransaction(
 			signedTransactionObject.rawTransaction
 		);
-		console.log(compiledFactory.abi);
-		console.log("Contract deployed to", result.contractAddress);
+		//console.log(compiledFactory.abi);
+		//console.log("Contract deployed to", result.contractAddress);
 	} catch (err) {
-		console.log(err);
+		//console.log(err);
 	}
 }
 

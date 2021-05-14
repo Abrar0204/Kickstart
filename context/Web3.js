@@ -13,7 +13,7 @@ const Web3Provider = ({ children }) => {
 		(async () => {
 			const web3Instance = await initializeWeb3();
 			if (web3Instance === "No Metamask") {
-				console.log("Shit");
+				//console.log("Shit");
 				setNoMetaMask(true);
 				return;
 			}
@@ -29,7 +29,7 @@ const Web3Provider = ({ children }) => {
 			);
 		})();
 		window?.ethereum?.on("disconnect", err =>
-			console.log("disconnected", err)
+			//console.log("disconnected", err)
 		);
 		window?.ethereum?.on(
 			"accountsChanged",

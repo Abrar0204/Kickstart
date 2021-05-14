@@ -67,7 +67,7 @@ const RequestTable = ({ id }) => {
 
 			setRequests(newRequests);
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 		}
 		setApproveLoading(false);
 	};
@@ -88,7 +88,7 @@ const RequestTable = ({ id }) => {
 
 			setRequests(newRequests);
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 		}
 		setFinalizeLoading(false);
 	};

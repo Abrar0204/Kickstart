@@ -31,7 +31,7 @@ beforeEach(async () => {
 			campaignAddress
 		);
 	} catch (err) {
-		console.log(err.message);
+		//console.log(err.message);
 	}
 });
 
