@@ -11,7 +11,7 @@ const initializeWeb3 = async () => {
 			web3.eth.defaultAccount = accounts[0];
 			return web3;
 		} catch (err) {
-			return err;
+			return "No Metamask";
 		}
 	} else {
 		const networkURL =

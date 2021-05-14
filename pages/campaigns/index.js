@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 
 import CampaignGrid from "../../components/Home/CampaignGrid";
 import { useWeb3 } from "../../context/Web3";
+import Loading from "../../components/shared/Loading";
 
 const useStyles = makeStyles({
 	container: {
@@ -24,21 +25,17 @@ export default function Home() {
 	const classes = useStyles();
 
 	return web3["version"] ? (
-		<>
-			<Container className={classes.container}>
-				<Typography
-					variant="h4"
-					components="h1"
-					className={classes.pageTitle}
-				>
-					Campaigns
-				</Typography>
-				<CampaignGrid />
-			</Container>
-		</>
+		<Container className={classes.container}>
+			<Typography
+				variant="h4"
+				components="h1"
+				className={classes.pageTitle}
+			>
+				Campaigns
+			</Typography>
+			<CampaignGrid />
+		</Container>
 	) : (
-		<>
-			<CircularProgress />
-		</>
+		<Loading />
 	);
 }

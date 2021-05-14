@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { getCampaign } from "../../../ethereum/campagin";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
@@ -9,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core";
 import Link from "next/link";
 import InfoCard from "../../../components/shared/InfoCard";
+import Loading from "../../../components/shared/Loading";
+
 const useStyles = makeStyles({
 	title: {
 		margin: "15px 0px",
@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 		margin: "40px 0px",
 	},
 });
+
 const Campaign = ({ id }) => {
 	const [contract, setContract] = useState({});
 	const [campaignData, setCampaignData] = useState({});
@@ -133,7 +134,7 @@ const Campaign = ({ id }) => {
 			</Link>
 		</Container>
 	) : (
-		<CircularProgress size="40" />
+		<Loading />
 	);
 };
 

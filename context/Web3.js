@@ -8,9 +8,15 @@ const Web3Provider = ({ children }) => {
 	const [factory, setFactory] = useState({});
 	const [campaigns, setCampaigns] = useState([]);
 	const [curAccount, setCurAccount] = useState("");
+	const [noMetamask, setNoMetaMask] = useState(false);
 	useEffect(() => {
 		(async () => {
 			const web3Instance = await initializeWeb3();
+			if (web3Instance === "No Metamask") {
+				console.log("Shit");
+				setNoMetaMask(true);
+				return;
+			}
 			setWeb3(web3Instance);
 			setCurAccount(web3Instance.eth.defaultAccount);
 
@@ -22,10 +28,10 @@ const Web3Provider = ({ children }) => {
 				)
 			);
 		})();
-		window.ethereum.on("disconnect", err =>
+		window?.ethereum?.on("disconnect", err =>
 			console.log("disconnected", err)
 		);
-		window.ethereum.on(
+		window?.ethereum?.on(
 			"accountsChanged",
 			arr => arr.length != 0 && setCurAccount(arr[0])
 		);
@@ -58,7 +64,14 @@ const Web3Provider = ({ children }) => {
 
 	return (
 		<Web3Context.Provider
-			value={{ web3, factory, campaigns, curAccount, getCampaigns }}
+			value={{
+				web3,
+				factory,
+				campaigns,
+				curAccount,
+				getCampaigns,
+				noMetamask,
+			}}
 		>
 			{children}
 		</Web3Context.Provider>
