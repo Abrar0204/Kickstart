@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getCampaign } from "../../../ethereum/campagin";
-import { useWeb3 } from "../../../context/Web3";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Button, Grid, makeStyles } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core";
 import Link from "next/link";
 import InfoCard from "../../../components/shared/InfoCard";
 const useStyles = makeStyles({
@@ -20,14 +20,13 @@ const useStyles = makeStyles({
 		margin: "40px 0px",
 	},
 });
-const Campaign = () => {
-	const router = useRouter();
+const Campaign = ({ id }) => {
 	const [contract, setContract] = useState({});
 	const [campaignData, setCampaignData] = useState({});
 	const classes = useStyles();
 	useEffect(() => {
 		const getCampaignData = async () => {
-			const contractIns = await getCampaign(router.query.id);
+			const contractIns = await getCampaign(id);
 
 			const campaign = await contractIns.methods
 				.getCamapaignData()
@@ -115,10 +114,7 @@ const Campaign = () => {
 						{campaignData.description}
 					</Typography>
 				</div>
-				<Link
-					href={`/campaigns/${router.query.id}/contribute`}
-					passHref
-				>
+				<Link href={`/campaigns/${id}/contribute`} passHref>
 					<Button color="primary" variant="contained">
 						Contribute
 					</Button>
@@ -126,7 +122,7 @@ const Campaign = () => {
 			</div>
 			{renderCampaignDetails()}
 
-			<Link href={`/campaigns/${router.query.id}/requests`} passHref>
+			<Link href={`/campaigns/${id}/requests`} passHref>
 				<Button
 					color="primary"
 					variant="text"
@@ -141,9 +137,11 @@ const Campaign = () => {
 	);
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ params }) {
 	return {
-		props: {}, // will be passed to the page component as props
+		props: {
+			id: params.id,
+		}, // will be passed to the page component as props
 	};
 }
 

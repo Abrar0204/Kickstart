@@ -10,9 +10,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core";
 
 import React, { useState, useEffect } from "react";
+import { useWeb3 } from "../../../../../context/Web3";
 import { useRouter } from "next/router";
-import { getCampaign } from "../../../../ethereum/campagin";
-import { useWeb3 } from "../../../../context/Web3";
+import { getCampaign } from "../../../../../ethereum/campagin";
 const useStyles = makeStyles({
 	formContainer: {
 		width: "50%",
@@ -35,11 +35,17 @@ const useStyles = makeStyles({
 	},
 });
 
-const Contribute = ({ id }) => {
+const NewRequest = ({ id }) => {
 	const classes = useStyles();
 	const router = useRouter();
+
 	const { curAccount } = useWeb3();
-	const [contribution, setContribution] = useState(0);
+
+	const [requestData, setRequestData] = useState({
+		cost: 0,
+		vendor: "",
+		description: "",
+	});
 	const [contract, setContract] = useState({});
 	const [errMessage, setErrMessage] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -48,34 +54,32 @@ const Contribute = ({ id }) => {
 	useEffect(() => {
 		async function initialize() {
 			const contractInstance = await getCampaign(id);
-			const minimumContribution = await contractInstance.methods
-				.minimumContribution()
-				.call();
-			setContribution(parseInt(minimumContribution) + 1);
 			setContract(contractInstance);
 		}
 		initialize();
 	}, []);
 
 	const handleChange = e => {
-		// const { name, value } = e.target;
-		setContribution(e.target.value);
+		const { name, value } = e.target;
+		setRequestData(prev => ({ ...prev, [name]: value }));
 	};
 
 	const handleSubmit = async e => {
 		e.preventDefault();
-		e.preventDefault();
+		console.log("What");
 		setLoading(true);
 		try {
+			const { description, vendor, cost } = requestData;
 			await contract.methods
-				.contribute()
-				.send({ from: curAccount, value: contribution });
+				.createRequest(description, cost, vendor)
+				.send({ from: curAccount });
 			setLoading(false);
 			setSuccess(true);
-			router.push(`/campaigns/${id}`);
+			router.push(`/campaigns/${id}/requests`);
 		} catch (err) {
 			let message = err.message || "";
 			setLoading(false);
+			console.log(err);
 			if (message.includes("User denied transaction signature")) {
 				setErrMessage("The transaction was cancelled.");
 			}
@@ -110,16 +114,32 @@ const Contribute = ({ id }) => {
 							component="h1"
 							className={classes.title}
 						>
-							Your Contribution
+							Create Request
 						</Typography>
 						<form className={classes.form} onSubmit={handleSubmit}>
 							<TextField
 								fullWidth
 								variant="outlined"
-								name="contribution"
-								label="Contribution"
+								name="description"
+								label="Request Description"
+								value={requestData.description}
+								onChange={handleChange}
+							/>
+							<TextField
+								fullWidth
+								variant="outlined"
+								name="vendor"
+								label="Vendor Address"
+								value={requestData.vendor}
+								onChange={handleChange}
+							/>
+							<TextField
+								fullWidth
+								variant="outlined"
+								name="cost"
+								label="Cost"
 								type="number"
-								value={contribution}
+								value={requestData.cost}
 								onChange={handleChange}
 								InputProps={{
 									endAdornment: (
@@ -141,7 +161,7 @@ const Contribute = ({ id }) => {
 										size={25}
 									/>
 								) : (
-									"Contribute"
+									"Create Request"
 								)}
 							</Button>
 						</form>
@@ -152,12 +172,12 @@ const Contribute = ({ id }) => {
 	);
 };
 
-export async function getServerSideProps({ params }) {
+export function getServerSideProps({ params }) {
 	return {
 		props: {
 			id: params.id,
-		}, // will be passed to the page component as props
+		},
 	};
 }
 
-export default Contribute;
+export default NewRequest;
