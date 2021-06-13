@@ -13,10 +13,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getCampaign } from "../../../../ethereum/campagin";
 import { useWeb3 } from "../../../../context/Web3";
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
 	formContainer: {
 		width: "50%",
 		padding: "0px 20px",
+		[theme.breakpoints.down("sm")]: {
+			width: "100%",
+		},
 	},
 	form: {
 		"& > *": {
@@ -33,7 +36,7 @@ const useStyles = makeStyles({
 		marginTop: "10px",
 		marginBottom: "30px",
 	},
-});
+}));
 
 const Contribute = ({ id }) => {
 	const classes = useStyles();

@@ -15,7 +15,7 @@ const InfoCard = ({ info }) => {
 	const classes = useStyles();
 	return (
 		<Paper className={classes.infoCard}>
-			<Typography variant="h5" component="h1" color="textPrimary">
+			<Typography variant="h5" component="h1" color="textPrimary" noWrap>
 				{title}
 			</Typography>
 			<Typography variant="subtitle1" color="textSecondary">

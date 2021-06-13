@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useWeb3 } from "../context/Web3";
 import Loading from "../components/shared/Loading";
 import Alert from "@material-ui/lab/Alert";
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
 	center: {
 		display: "flex",
 		flexDirection: "column",
@@ -16,15 +16,33 @@ const useStyles = makeStyles({
 		color: "#fff",
 		width: "100%",
 		height: "70vh",
+
 		"& > *": {
 			margin: "8px",
+			[theme.breakpoints.down("md")]: {
+				textAlign: "center",
+			},
+		},
+		[theme.breakpoints.down("xs")]: {
+			height: "auto",
 		},
 	},
-
+	largeFont: {
+		fontSize: "60px",
+		[theme.breakpoints.down("xs")]: {
+			fontSize: "45px",
+		},
+	},
+	mediumFont: {
+		fontSize: "45px",
+		[theme.breakpoints.down("xs")]: {
+			fontSize: "30px",
+		},
+	},
 	button: {
 		margin: "20px",
 	},
-});
+}));
 
 export default function Home() {
 	const { web3, noMetamask } = useWeb3();
@@ -32,11 +50,21 @@ export default function Home() {
 
 	return noMetamask ? (
 		<Container className={classes.center}>
-			<Typography variant="h2" color="textPrimary">
-				Welcome To KickStart,
+			<Typography
+				variant="h2"
+				component="h1"
+				color="textPrimary"
+				className={classes.largeFont}
+			>
+				Welcome To KickStart
 			</Typography>
-			<Typography variant="h4" color="textPrimary">
-				a Crowdfunding Platform powered by Blockchain
+			<Typography
+				variant="h4"
+				component="h2"
+				color="textPrimary"
+				className={classes.mediumFont}
+			>
+				A Crowdfunding Platform powered by Blockchain
 			</Typography>
 			<Alert severity="error">
 				You need to install{" "}
@@ -49,11 +77,21 @@ export default function Home() {
 	) : web3["version"] ? (
 		<>
 			<Container className={classes.center}>
-				<Typography variant="h2" color="textPrimary">
-					Welcome To KickStart,
+				<Typography
+					variant="h2"
+					component="h1"
+					color="textPrimary"
+					className={classes.largeFont}
+				>
+					Welcome To KickStart
 				</Typography>
-				<Typography variant="h4" color="textPrimary">
-					a Crowdfunding Platform powered by Blockchain
+				<Typography
+					variant="h4"
+					component="h2"
+					color="textPrimary"
+					className={classes.mediumFont}
+				>
+					A Crowdfunding Platform powered by Blockchain
 				</Typography>
 
 				<Link href="/campaigns" passHref>

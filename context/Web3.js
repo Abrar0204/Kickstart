@@ -29,7 +29,7 @@ const Web3Provider = ({ children }) => {
 			);
 		})();
 		window?.ethereum?.on("disconnect", err =>
-			//console.log("disconnected", err)
+			console.log("disconnected", err)
 		);
 		window?.ethereum?.on(
 			"accountsChanged",

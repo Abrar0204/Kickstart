@@ -9,17 +9,23 @@ import Link from "next/link";
 import InfoCard from "../../../components/shared/InfoCard";
 import Loading from "../../../components/shared/Loading";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
 	title: {
 		margin: "15px 0px",
+		width: "100%",
 	},
 	header: {
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "space-between",
 		margin: "40px 0px",
+		[theme.breakpoints.down("xs")]: {
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "stretch",
+		},
 	},
-});
+}));
 
 const Campaign = ({ id }) => {
 	const [contract, setContract] = useState({});
@@ -55,38 +61,55 @@ const Campaign = ({ id }) => {
 				meta: "Manager Address",
 				description:
 					"The manager created this campaign and can create requests.",
-				xs: 7,
+				xs: 12,
+				sm: 12,
+				md: 7,
 			},
 			{
 				title: `${campaignData.minimumContribution} wei(s)`,
 				meta: "Minimum Contribution",
 				description: "Minimum wei(s) required to become contributor.",
-				xs: 5,
+				xs: 12,
+				sm: 6,
+				md: 5,
 			},
 			{
 				title: campaignData.requestLength,
 				meta: "No of Requests",
 				description: "Requests to withdraw money from contract.",
-				xs: 4,
+				xs: 12,
+				sm: 6,
+				md: 4,
 			},
 			{
 				title: campaignData.approverLength,
 				meta: "No of Approvers/Contributors",
 				description: "No of people who donated to campaigns.",
-				xs: 4,
+				xs: 12,
+				sm: 6,
+				md: 4,
 			},
 			{
 				title: campaignData.balance,
 				meta: "Campaign Balance (wei)",
 				description: "How much money this campaign has gathered.",
-				xs: 4,
+				xs: 12,
+				sm: 6,
+				md: 4,
 			},
 		];
 
 		return (
 			<Grid container spacing={2}>
 				{data.map(info => (
-					<Grid item key={info.meta} xs={info.xs}>
+					<Grid
+						item
+						zeroMinWidth
+						key={info.meta}
+						xs={info.xs}
+						sm={info.sm}
+						md={info.md}
+					>
 						<InfoCard info={info} />
 					</Grid>
 				))}

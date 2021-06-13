@@ -12,7 +12,7 @@ const CampaignGrid = () => {
 	}, []);
 
 	return (
-		<Grid container spacing={3}>
+		<Grid container spacing={3} alignItems="center">
 			{Object.keys(campaigns).map(campaignKey => (
 				<CampaignCard
 					campaign={campaigns[campaignKey]}

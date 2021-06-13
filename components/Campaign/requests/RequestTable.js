@@ -6,10 +6,20 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import Paper from "@material-ui/core/Paper";
 import { getCampaign } from "../../../ethereum/campagin";
 import { useWeb3 } from "../../../context/Web3";
 import Loading from "../../shared/Loading";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+	tableContainer: {
+		margin: "10px",
+		padding: "10px",
+		overflowX: "auto",
+	},
+}));
+
 const RequestTable = ({ id }) => {
 	const { curAccount } = useWeb3();
 
@@ -20,7 +30,7 @@ const RequestTable = ({ id }) => {
 	const [dataLoading, setDataLoading] = useState(true);
 	const [approveloading, setApproveLoading] = useState(false);
 	const [finalizeLoading, setFinalizeLoading] = useState(false);
-
+	const classes = useStyles();
 	useEffect(() => {
 		async function initialize() {
 			setDataLoading(true);
@@ -96,67 +106,69 @@ const RequestTable = ({ id }) => {
 	return dataLoading ? (
 		<Loading />
 	) : (
-		<Table style={{ margin: "20px 10px" }} aria-label="simple table">
-			<TableHead>
-				<TableRow>
-					<TableCell width="65">ID</TableCell>
-					<TableCell>Description</TableCell>
-					<TableCell>Value</TableCell>
-					<TableCell>Recepient</TableCell>
-					<TableCell>Approval Count</TableCell>
-					<TableCell>Approve</TableCell>
-					<TableCell>Finalize</TableCell>
-				</TableRow>
-			</TableHead>
-			<TableBody>
-				{requests.map((req, index) => (
-					<TableRow key={req.description}>
-						<TableCell>{index + 1}</TableCell>
-						<TableCell component="th" scope="row">
-							{req.description}
-						</TableCell>
-
-						<TableCell>{req.value}</TableCell>
-						<TableCell>{req.vendor}</TableCell>
-						<TableCell>
-							{req.approvalCount}/{totalApprovers}
-						</TableCell>
-						<TableCell>
-							<Button
-								variant="text"
-								color="primary"
-								onClick={() => approveRequest(index)}
-							>
-								{approveloading ? (
-									<CircularProgress size="16px" />
-								) : (
-									"Approve"
-								)}
-							</Button>
-						</TableCell>
-						<TableCell>
-							<Button
-								variant="contained"
-								color="primary"
-								disabled={req.complete}
-								onClick={() => finalizeRequest(index)}
-							>
-								{finalizeLoading ? (
-									<CircularProgress
-										size="16px"
-										color="secondary"
-									/>
-								) : req.complete ? (
-									"Finalized"
-								) : (
-									"Finalize"
-								)}
-							</Button>
-						</TableCell>
+		<Paper className={classes.tableContainer}>
+			<Table aria-label="simple table">
+				<TableHead>
+					<TableRow>
+						<TableCell width="65">ID</TableCell>
+						<TableCell>Description</TableCell>
+						<TableCell>Value</TableCell>
+						<TableCell>Recepient</TableCell>
+						<TableCell>Approval Count</TableCell>
+						<TableCell>Approve</TableCell>
+						<TableCell>Finalize</TableCell>
 					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+				</TableHead>
+				<TableBody>
+					{requests.map((req, index) => (
+						<TableRow key={req.description}>
+							<TableCell>{index + 1}</TableCell>
+							<TableCell component="th" scope="row">
+								{req.description}
+							</TableCell>
+
+							<TableCell>{req.value}</TableCell>
+							<TableCell>{req.vendor}</TableCell>
+							<TableCell>
+								{req.approvalCount}/{totalApprovers}
+							</TableCell>
+							<TableCell>
+								<Button
+									variant="text"
+									color="primary"
+									onClick={() => approveRequest(index)}
+								>
+									{approveloading ? (
+										<CircularProgress size="16px" />
+									) : (
+										"Approve"
+									)}
+								</Button>
+							</TableCell>
+							<TableCell>
+								<Button
+									variant="contained"
+									color="primary"
+									disabled={req.complete}
+									onClick={() => finalizeRequest(index)}
+								>
+									{finalizeLoading ? (
+										<CircularProgress
+											size="16px"
+											color="secondary"
+										/>
+									) : req.complete ? (
+										"Finalized"
+									) : (
+										"Finalize"
+									)}
+								</Button>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</Paper>
 	);
 };
 
