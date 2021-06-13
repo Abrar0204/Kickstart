@@ -67,10 +67,10 @@ const Layout = ({ children }) => {
 			<Drawer
 				variant="temporary"
 				anchor="left"
-				open={!menuOpen}
+				open={menuOpen}
 				onClose={toggleDrawer}
 			>
-				<List className={classes.drawer}>
+				<List className={classes.drawer} onClick={toggleDrawer}>
 					<Link href="/" passHref>
 						<Button variant="text" className={classes.drawerLogo}>
 							<Typography variant="h5" component="h1">
