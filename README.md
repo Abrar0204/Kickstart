@@ -10,6 +10,6 @@ Deployed @ <a href="https://kickstart-eta.vercel.app/">https://kickstart-eta.ver
 -   Solidity
 -   Web3
 
-## Author
+## Authors
 - [Abrar Hasan](https://github.com/Abrar0204)
 - [Aadhavan](https://github.com/aadhavanm02)
